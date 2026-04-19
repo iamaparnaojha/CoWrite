@@ -1,11 +1,10 @@
 "use server";
 import { nanoid } from "nanoid";
-import { title } from "process";
 import { liveblocks } from "../liveblocks";
 import { revalidatePath } from "next/cache";
 import { getAccessType, parseStringify } from "../utils";
-import { error } from "console";
 import { redirect } from "next/navigation";
+import { clerkClient } from "@clerk/nextjs/server";
 export const createDocument = async ({
   userId,
   email,
@@ -92,6 +91,11 @@ export const updateDocumentAccess = async ({
   updatedBy,
 }: ShareDocumentParams) => {
   try {
+    // Validate email format
+    if (!email || !email.includes('@')) {
+      throw new Error('Please enter a valid email address');
+    }
+
     const usersAccesses: RoomAccesses = {
       [email]: getAccessType(userType) as AccessType,
     };
@@ -103,6 +107,19 @@ export const updateDocumentAccess = async ({
     if (room) {
       const notificationId = nanoid();
 
+      // Send Clerk Invitation (Email)
+      try {
+        await clerkClient.invitations.createInvitation({
+          emailAddress: email,
+          redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/documents/${roomId}`,
+          ignoreExisting: true, // Don't fail if already invited
+        });
+      } catch (inviteError) {
+        console.log(`Failed to send invitation email: ${inviteError}`);
+        // Continue even if email fails, as access is already granted
+      }
+
+      // Send Liveblocks Notification (In-app)
       await liveblocks.triggerInboxNotification({
         userId: email,
         kind: "$documentAccess",
@@ -122,6 +139,7 @@ export const updateDocumentAccess = async ({
     return parseStringify(room);
   } catch (error) {
     console.log(`Error happened while updating a room access: ${error}`);
+    throw error;
   }
 };
 

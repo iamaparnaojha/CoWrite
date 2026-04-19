@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import logo from '@/public/assets/icons/logo.svg'
 import { cn } from '@/lib/utils'
+import ThemeToggle from './ThemeToggle'
 
 
 const Header = ({children,className}: HeaderProps) => {
@@ -22,7 +23,10 @@ const Header = ({children,className}: HeaderProps) => {
         height={64}
         className='mr-2 md:hidden' />
         </Link>
-        {children}
+        <div className='flex items-center gap-2 md:gap-5'>
+          <ThemeToggle />
+          {children}
+        </div>
       
     </div>
   )

@@ -1,12 +1,16 @@
 import { SignIn } from '@clerk/nextjs'
-import React from 'react'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 const SignInPage = () => {
   return (
-    <main className='auth-page'>
+    <main className='auth-page flex flex-col items-center justify-center min-h-screen'>
+      <div className='absolute top-6 right-6'>
+        <ThemeToggle />
+      </div>
       <SignIn />
     </main>
   )
 }
 
 export default SignInPage
+

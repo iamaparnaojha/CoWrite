@@ -1,5 +1,4 @@
 "use client"
-import edit from '@/public/assets/icons/edit.svg'
 import React, { useEffect, useRef, useState } from 'react'
 import {
 LiveblocksProvider,
@@ -13,7 +12,6 @@ import Header from '@/components/Header'
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import ActiveCollaborators from './ActiveCollaborators';
 import { Input } from './ui/input';
-import { currentUser } from '@clerk/nextjs/server';
 import Image from 'next/image';
 import { updateDocument } from '@/lib/actions/room.actions';
 import Loader from './Loader';
@@ -93,7 +91,7 @@ const CollaborativeRoom = ({roomId,roomMetadata,users,currentUserType}:
         }
        {currentUserType==='editor' && !editing && (
         <Image
-        src={edit}
+        src="/assets/icons/edit.svg"
         alt='edit'
         height={24}
         width={24}

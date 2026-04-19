@@ -7,7 +7,6 @@ import {
 } from "@liveblocks/react/suspense";
 import Loader from '@/components/Loader';
 import { getClerkUsers, getDocumentUsers } from '@/lib/actions/user.action';
-import { currentUser } from '@clerk/nextjs/server';
 import { useUser } from '@clerk/nextjs';
 const Provider = ({children}:{children:ReactNode}) => {
 

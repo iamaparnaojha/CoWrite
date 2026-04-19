@@ -10,6 +10,7 @@ import { Inter as FontSans } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { Metadata } from "next"
 import Provider from './Provider'
+import { ThemeProvider } from './ThemeProvider'
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -24,11 +25,15 @@ export default function RootLayout({ children }:{children:React.ReactNode} ) {
   return (
    <ClerkProvider
    appearance={{
-    
+    baseTheme: undefined,
     variables:{
-      
       colorPrimary:'#3371FF',
-      fontSize:'16px'
+      fontSize:'16px',
+      colorText: '#ffffff',
+      colorTextSecondary: '#b0b9c3',
+      colorInputBackground: '#1a1a2e',
+      colorInputBorder: '#3f4653',
+      colorBackground: '#0f172a',
     }
    }}
    >
@@ -40,16 +45,13 @@ export default function RootLayout({ children }:{children:React.ReactNode} ) {
           fontSans.variable
         )}
       >
-        <Provider>
-{children}
-        </Provider>
-        
+        <ThemeProvider>
+          <Provider>
+            {children}
+          </Provider>
+        </ThemeProvider>
       </body>
     </html>
    </ClerkProvider>
-
-    
-    
-    
   )
 }

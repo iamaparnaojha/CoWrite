@@ -39,13 +39,29 @@ export const getClerkUsers = async ({ userIds }: { userIds: string[] }) => {
       avatar: user.imageUrl,
     }));
 
+    const usersByEmail = new Map(users.map((user) => [user.email, user]));
+
     const sortedUsers = userIds.map((email) =>
-      users.find((user) => user.email === email)
+      usersByEmail.get(email) ?? {
+        id: email,
+        name: email,
+        email,
+        avatar: null,
+      }
     );
 
     return parseStringify(sortedUsers);
   } catch (error) {
     console.log(`Error fetching users: ${error}`);
+
+    return parseStringify(
+      userIds.map((email) => ({
+        id: email,
+        name: email,
+        email,
+        avatar: null,
+      }))
+    );
   }
 };
 
